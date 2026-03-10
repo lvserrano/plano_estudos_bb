@@ -1,0 +1,1884 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plano de Estudos — BB Agente de Tecnologia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* ── BB BRAND COLORS ── */
+            --bb-yellow: #f5d100;
+            --bb-yellow-dim: #7a6800;
+            --bb-yellow-dark: #3d3400;
+            --bb-blue: #003882;
+            --bb-blue-light: #0050b8;
+            --bb-blue-muted: #002560;
+
+            /* ── SURFACES ── */
+            --bg: #05090f;
+            --surface: #0a1020;
+            --surface2: #0e1628;
+            --border: #162035;
+            --border2: #1e2e47;
+
+            /* ── TEXT ── */
+            --text: #eef2f8;
+            --muted: #5a7a9a;
+            --muted2: #2e4460;
+
+            /* ── SUBJECT COLORS ── */
+            --pt: #4fa8e8;
+            --en: #34d399;
+            --ma: #fbbf24;
+            --mf: #c084fc;
+            --pe: #f87171;
+            --cb: #22d3ee;
+            --ti: #fb923c;
+
+            /* ── ACCENT ── */
+            --gold: #f5d100;
+            --gold-dim: #7a6800;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ── NOISE TEXTURE + BB GLOW ── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 70% 50% at 15% 5%, rgba(0, 56, 130, 0.18) 0%, transparent 55%),
+                radial-gradient(ellipse 50% 40% at 85% 85%, rgba(245, 209, 0, 0.06) 0%, transparent 55%);
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.5;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px 80px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ── HEADER ── */
+        header {
+            padding: 60px 0 44px;
+            text-align: center;
+            position: relative;
+            margin-bottom: 36px;
+        }
+
+        header::after {
+            content: '';
+            display: block;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--bb-blue-light), var(--bb-yellow), var(--bb-blue-light), transparent);
+            margin-top: 44px;
+            opacity: 0.5;
+        }
+
+        .header-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 56, 130, 0.15);
+            border: 1px solid rgba(0, 80, 184, 0.35);
+            border-radius: 2px;
+            padding: 5px 16px;
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--bb-yellow);
+            margin-bottom: 24px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease 0.2s forwards;
+        }
+
+        .header-badge::before {
+            content: '';
+            display: inline-block;
+            width: 24px;
+            height: 1px;
+            background: var(--bb-yellow);
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(28px, 5.5vw, 52px);
+            font-weight: 900;
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+            margin-bottom: 14px;
+            color: var(--text);
+            opacity: 0;
+            animation: fadeUp 0.8s ease 0.4s forwards;
+        }
+
+        header h1 em {
+            font-style: italic;
+            color: var(--bb-yellow);
+        }
+
+        header p {
+            color: var(--muted);
+            font-size: 15px;
+            font-weight: 300;
+            line-height: 1.7;
+            max-width: 480px;
+            margin: 0 auto 32px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease 0.6s forwards;
+        }
+
+        /* ── LEGEND ── */
+        .legend {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            color: var(--muted);
+            margin-bottom: 10px;
+            letter-spacing: 0.06em;
+            opacity: 0;
+            animation: fadeUp 0.8s ease 0.8s forwards;
+        }
+
+        .legend span {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            text-transform: uppercase;
+        }
+
+        .legend-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 1px;
+        }
+
+        /* ── GLOBAL PROGRESS ── */
+        .global-progress {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 22px 28px;
+            margin-bottom: 32px;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .global-progress::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--bb-blue), var(--bb-yellow));
+        }
+
+        .gp-label {
+            font-family: 'DM Mono', monospace;
+            font-weight: 500;
+            font-size: 10px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            white-space: nowrap;
+        }
+
+        .gp-bar-wrap {
+            flex: 1;
+        }
+
+        .gp-track {
+            height: 6px;
+            background: var(--border);
+            border-radius: 1px;
+            overflow: hidden;
+            margin-bottom: 7px;
+        }
+
+        .gp-fill {
+            height: 100%;
+            border-radius: 1px;
+            background: linear-gradient(90deg, var(--bb-blue-light), var(--bb-yellow));
+            transition: width 0.5s cubic-bezier(.4, 0, .2, 1);
+        }
+
+        .gp-stats {
+            display: flex;
+            justify-content: space-between;
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.05em;
+            color: var(--muted);
+        }
+
+        .gp-pct {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--bb-yellow);
+            white-space: nowrap;
+            line-height: 1;
+        }
+
+        /* ── SUBJECT CARD ── */
+        .subject-card {
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 10px;
+            background: var(--surface);
+            transition: border-color 0.25s, box-shadow 0.25s;
+        }
+
+        .subject-card:hover {
+            border-color: var(--border2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .subject-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 18px 22px;
+            cursor: pointer;
+            user-select: none;
+            background: transparent;
+            border: none;
+            color: inherit;
+            width: 100%;
+            text-align: left;
+            transition: background 0.15s;
+        }
+
+        .subject-header:hover {
+            background: rgba(0, 56, 130, 0.05);
+        }
+
+        .subject-accent-bar {
+            width: 4px;
+            height: 36px;
+            border-radius: 99px;
+            flex-shrink: 0;
+        }
+
+        .subject-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .subject-title-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .subject-title {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 15px;
+            letter-spacing: -0.01em;
+        }
+
+        .subject-meta {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            color: var(--muted);
+            margin-top: 3px;
+            letter-spacing: 0.05em;
+        }
+
+        .weight-badge {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            font-weight: 500;
+            padding: 2px 8px;
+            border-radius: 2px;
+            white-space: nowrap;
+            letter-spacing: 0.05em;
+        }
+
+        .subject-progress-col {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        .subject-track {
+            width: 90px;
+            height: 4px;
+            background: var(--border);
+            border-radius: 1px;
+            overflow: hidden;
+        }
+
+        .subject-fill {
+            height: 100%;
+            border-radius: 1px;
+            transition: width 0.4s;
+        }
+
+        .subject-pct {
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            font-weight: 500;
+            min-width: 32px;
+            text-align: right;
+        }
+
+        .chevron {
+            font-size: 12px;
+            color: var(--muted2);
+            transition: transform 0.3s;
+        }
+
+        .chevron.open {
+            transform: rotate(180deg);
+        }
+
+        /* ── TOPICS BODY ── */
+        .subject-body {
+            display: none;
+            padding: 0 22px 22px;
+        }
+
+        .subject-body.open {
+            display: block;
+        }
+
+        .subtopic-group {
+            margin-bottom: 22px;
+        }
+
+        .subtopic-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .subtopic-title {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding: 10px 0 11px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .topic-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 11px;
+            padding: 10px 12px;
+            border-radius: 3px;
+            cursor: pointer;
+            user-select: none;
+            background: transparent;
+            border: 1px solid transparent;
+            margin-bottom: 4px;
+            transition: all 0.15s;
+            width: 100%;
+            text-align: left;
+            color: inherit;
+        }
+
+        .topic-item:hover {
+            background: rgba(0, 56, 130, 0.08);
+            border-color: rgba(0, 80, 184, 0.2);
+        }
+
+        .topic-item.checked {
+            background: rgba(245, 209, 0, 0.04);
+        }
+
+        .checkbox {
+            width: 17px;
+            height: 17px;
+            min-width: 17px;
+            border-radius: 2px;
+            border: 1.5px solid var(--muted2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 2px;
+            transition: all 0.15s;
+            flex-shrink: 0;
+        }
+
+        .topic-item.checked .checkbox {
+            border-color: transparent;
+        }
+
+        .checkbox svg {
+            display: none;
+        }
+
+        .topic-item.checked .checkbox svg {
+            display: block;
+        }
+
+        .topic-text-wrap {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .topic-main {
+            font-size: 13.5px;
+            line-height: 1.5;
+            transition: color 0.15s;
+        }
+
+        .topic-item.checked .topic-main {
+            color: var(--muted);
+            text-decoration: line-through;
+            text-decoration-color: var(--muted2);
+        }
+
+        .topic-subs {
+            font-size: 11.5px;
+            color: var(--muted);
+            line-height: 1.6;
+            margin-top: 3px;
+        }
+
+        .topic-item.checked .topic-subs {
+            color: var(--muted2);
+        }
+
+        .topic-badges {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+            margin-top: 4px;
+        }
+
+        .badge-prova {
+            font-family: 'DM Mono', monospace;
+            font-size: 9px;
+            font-weight: 500;
+            padding: 2px 8px;
+            border-radius: 2px;
+            white-space: nowrap;
+            background: rgba(245, 209, 0, 0.08);
+            color: var(--bb-yellow);
+            border: 1px solid rgba(245, 209, 0, 0.2);
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            letter-spacing: 0.04em;
+        }
+
+        .badge-high {
+            font-family: 'DM Mono', monospace;
+            font-size: 9px;
+            font-weight: 500;
+            padding: 2px 8px;
+            border-radius: 2px;
+            background: rgba(248, 113, 113, 0.08);
+            color: #f87171;
+            border: 1px solid rgba(248, 113, 113, 0.2);
+            letter-spacing: 0.04em;
+        }
+
+        /* ── PYTHON BANNER ── */
+        .python-banner {
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 28px;
+            background: var(--surface);
+        }
+
+        .python-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 22px;
+            cursor: pointer;
+            user-select: none;
+            background: transparent;
+            border: none;
+            color: inherit;
+            width: 100%;
+            text-align: left;
+        }
+
+        .python-header:hover {
+            background: rgba(0, 56, 130, 0.06);
+        }
+
+        .python-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 14px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .python-body {
+            display: none;
+            padding: 0 20px 20px;
+        }
+
+        .python-body.open {
+            display: block;
+        }
+
+        .python-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        @media(max-width:600px) {
+            .python-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .python-col h4 {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .python-col p {
+            font-size: 12.5px;
+            line-height: 1.6;
+            margin-bottom: 5px;
+        }
+
+        .python-note {
+            background: rgba(0, 56, 130, 0.12);
+            border: 1px solid rgba(0, 80, 184, 0.25);
+            border-radius: 3px;
+            padding: 14px 18px;
+            font-size: 13px;
+            color: #7ec8f0;
+            line-height: 1.7;
+        }
+
+        @media(max-width:640px) {
+            .global-progress {
+                flex-direction: column;
+                gap: 12px;
+                align-items: flex-start;
+            }
+
+            .subject-progress-col {
+                display: none;
+            }
+        }
+
+        /* ── ANIMATIONS ── */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ── SECTION LABEL ── */
+        .section-label {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--bb-yellow);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-label::before {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 1px;
+            background: var(--bb-yellow);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <!-- HEADER -->
+        <header>
+            <div class="header-badge">🏦 Banco do Brasil · Edital 2022/001</div>
+            <h1>Plano de Estudos<br><em>Agente de Tecnologia</em></h1>
+            <p>Todos os tópicos do edital oficial com subtópicos detalhados. Tópicos que <strong style="color:var(--bb-yellow)">caíram na prova</strong> estão sinalizados.</p>
+            <div class="legend">
+                <span><span class="legend-dot" style="background:var(--bb-yellow);"></span> Caiu na prova</span>
+                <span><span class="legend-dot" style="background:#f87171;"></span> Alta recorrência</span>
+                <span><span class="legend-dot" style="background:var(--muted2);"></span> Pendente</span>
+                <span><span class="legend-dot" style="background:#22c55e;"></span> Concluído</span>
+            </div>
+        </header>
+
+        <!-- GLOBAL PROGRESS -->
+        <div class="global-progress">
+            <div class="gp-label">Progresso<br>Geral</div>
+            <div class="gp-bar-wrap">
+                <div class="gp-track">
+                    <div class="gp-fill" id="gpFill" style="width:0%"></div>
+                </div>
+                <div class="gp-stats">
+                    <span id="gpDone">0 concluídos</span>
+                    <span id="gpTotal">0 tópicos</span>
+                </div>
+            </div>
+            <div class="gp-pct" id="gpPct">0%</div>
+        </div>
+
+
+        <!-- SUBJECTS CONTAINER -->
+        <div id="subjectsContainer"></div>
+
+    </div>
+
+    <script>
+        const DATA = [
+            {
+                id: "pt",
+                title: "Língua Portuguesa",
+                color: "#4fa8e8",
+                weight: "15,0 pts",
+                questoes: "Q1–Q10 · 1,5pt cada",
+                groups: [
+                    {
+                        title: "1. Compreensão de Textos",
+                        items: [
+                            {
+                                main: "Interpretação de texto",
+                                subs: "Tema central, ideia principal vs secundária, inferência simples e complexa, fato x opinião, ponto de vista do autor.",
+                                prova: ["Q1 — tema empreendedorismo social", "Q2 — diferença empreendedorismo x negócio social"],
+                                high: true
+                            },
+                            {
+                                main: "Tipologia textual",
+                                subs: "Texto narrativo, descritivo, dissertativo-argumentativo, injuntivo. Características de cada tipo. Gêneros textuais.",
+                            },
+                            {
+                                main: "Coerência e coesão textual",
+                                subs: "Elementos de coesão referencial (pronomes, sinônimos, elipses), sequencial (conectivos). Progressão temática.",
+                            },
+                            {
+                                main: "Figuras de linguagem",
+                                subs: "Metáfora, metonímia, ironia, eufemismo, hipérbole, antítese, paradoxo, sinestesia.",
+                            },
+                        ]
+                    },
+                    {
+                        title: "2. Ortografia Oficial",
+                        items: [
+                            {
+                                main: "Ortografia e acentuação gráfica",
+                                subs: "Regras de acentuação: oxítonas, paroxítonas, proparoxítonas. Ditongo, hiato, tritongo. Uso do hífen.",
+                            },
+                            {
+                                main: "Emprego de letras",
+                                subs: "G/J, S/Z/X/SS/SC/SÇ/XC, C/Ç, E/I, O/U em posição átona. Palavras com grafia dupla.",
+                            },
+                        ]
+                    },
+                    {
+                        title: "3. Classe e Emprego de Palavras",
+                        items: [
+                            {
+                                main: "Substantivos, adjetivos e artigos",
+                                subs: "Classificação, flexão de gênero/número/grau. Artigo definido e indefinido. Adjetivo pátrio.",
+                            },
+                            {
+                                main: "Verbos — conjugação e classificação",
+                                subs: "Modos (indicativo, subjuntivo, imperativo), tempos verbais, vozes (ativa, passiva, reflexiva). Verbos irregulares e defectivos.",
+                            },
+                            {
+                                main: "Pronomes — tipos e emprego",
+                                subs: "Pessoais (retos e oblíquos), possessivos, demonstrativos, relativos, interrogativos, indefinidos. Emprego correto.",
+                                prova: ["Q7 — pronome 'seu' como referência anafórica"],
+                                high: true
+                            },
+                            {
+                                main: "Advérbios, preposições e conjunções",
+                                subs: "Classificação de advérbios (modo, tempo, lugar, intensidade). Conjunções coordenativas e subordinativas. Locuções.",
+                                prova: ["Q4 — 'Ainda que' = concessiva (= Mesmo que)"],
+                                high: true
+                            },
+                            {
+                                main: "Sinonímia e antonímia",
+                                subs: "Substituição de palavras/expressões sem prejuízo de sentido.",
+                                prova: ["Q3 — 'alavancar' = impulsionar", "Q5 — 'concepção' = compreensão"],
+                                high: true
+                            },
+                        ]
+                    },
+                    {
+                        title: "4. Emprego do Acento Indicativo de Crase",
+                        items: [
+                            {
+                                main: "Regras obrigatórias, facultativas e proibidas da crase",
+                                subs: "Crase antes de substantivos femininos, locução adverbial, pronomes demonstrativos (àquela, àquele, àquilo). Proibida antes de masculinos, verbos, pronomes pessoais.",
+                                prova: ["Q8 — 'a uma nova forma' = crase obrigatória"],
+                                high: true
+                            },
+                        ]
+                    },
+                    {
+                        title: "5. Sintaxe da Oração e do Período",
+                        items: [
+                            {
+                                main: "Termos essenciais da oração",
+                                subs: "Sujeito (simples, composto, oculto, indeterminado), predicado (verbal, nominal, verbo-nominal), predicativo.",
+                            },
+                            {
+                                main: "Termos integrantes e acessórios",
+                                subs: "Objeto direto e indireto. Complemento nominal. Adjunto adnominal e adverbial. Aposto e vocativo.",
+                            },
+                            {
+                                main: "Orações subordinadas e coordenadas",
+                                subs: "Substantivas, adjetivas e adverbiais (causais, concessivas, condicionais, conformativas, finais, temporais). Coordenadas (aditivas, adversativas, conclusivas, explicativas, alternativas).",
+                            },
+                        ]
+                    },
+                    {
+                        title: "6. Emprego dos Sinais de Pontuação",
+                        items: [
+                            {
+                                main: "Vírgula — casos obrigatórios e proibidos",
+                                subs: "Obrigatória: aposto, vocativo, adjunto adverbial deslocado, orações intercaladas, enumerações. Proibida: entre sujeito e predicado, entre verbo e complemento.",
+                                prova: ["Q9 — vírgula após adjunto adverbial deslocado"],
+                                high: true
+                            },
+                            {
+                                main: "Ponto-e-vírgula, dois-pontos, travessão, aspas",
+                                subs: "Uso correto de cada sinal em diferentes contextos textuais.",
+                            },
+                        ]
+                    },
+                    {
+                        title: "7. Concordância Verbal e Nominal",
+                        items: [
+                            {
+                                main: "Concordância verbal — regras gerais",
+                                subs: "Sujeito simples, composto (antes/depois do verbo), sujeito coletivo, pronomes de tratamento.",
+                            },
+                            {
+                                main: "Concordância verbal — casos especiais",
+                                subs: "Sujeito oracional, verbos impessoais (haver, fazer, ser), partitivos (a maioria de, parte de), voz passiva analítica.",
+                            },
+                            {
+                                main: "Concordância nominal — regras gerais",
+                                subs: "Adjetivo predicativo e atributivo com vários substantivos. Casos especiais: 'é proibido', 'é necessário', 'obrigado'.",
+                                prova: ["Q6 — concordância de particípio/adjetivo com sujeito composto"],
+                                high: true
+                            },
+                        ]
+                    },
+                    {
+                        title: "8. Regência Verbal e Nominal",
+                        items: [
+                            {
+                                main: "Regência verbal — verbos com complementos",
+                                subs: "Verbos de regência variada: assistir, aspirar, visar, querer, precisar, implicar, pagar, perdoar, obedecer. Transitividade direta e indireta.",
+                            },
+                            {
+                                main: "Regência nominal",
+                                subs: "Nomes que exigem complemento com preposição específica: ansioso por, acessível a, favorável a, propenso a.",
+                            },
+                        ]
+                    },
+                    {
+                        title: "9. Colocação Pronominal",
+                        items: [
+                            {
+                                main: "Próclise — quando usar",
+                                subs: "Palavras atrativas: negação (não, nunca, jamais), pronomes indefinidos, demonstrativos, relativos, conjunções subordinativas, advérbios sem pausa.",
+                            },
+                            {
+                                main: "Ênclise — quando usar",
+                                subs: "Início de oração, verbo no imperativo afirmativo, verbo no futuro do presente/pretérito.",
+                            },
+                            {
+                                main: "Mesóclise — quando usar",
+                                subs: "Futuro do presente e futuro do pretérito no início de oração ou após vírgula.",
+                                prova: ["Q10 — colocação pronominal correta em oração com 'para + infinitivo'"],
+                                high: true
+                            },
+                        ]
+                    },
+                ]
+            },
+
+            {
+                id: "en",
+                title: "Língua Inglesa",
+                color: "#34d399",
+                weight: "5,0 pts",
+                questoes: "Q11–Q15 · 1,0pt cada",
+                groups: [
+                    {
+                        title: "Vocabulário e Gramática para Compreensão de Textos",
+                        items: [
+                            {
+                                main: "Reading comprehension — estruturas essenciais",
+                                subs: "Main idea, topic sentence, supporting details, conclusion. Skimming (visão geral) e scanning (busca pontual).",
+                                prova: ["Q11 — ideia principal do texto", "Q13 — localização de informação específica", "Q15 — inferência sobre IA"],
+                                high: true
+                            },
+                            {
+                                main: "Pronomes relativos e de referência",
+                                subs: "Who (pessoas), which (coisas/ideias), that (ambos), whose (posse), where (lugar). Antecedentes e referência anafórica.",
+                                prova: ["Q12 — who → Lydians; which → coins"],
+                                high: true
+                            },
+                            {
+                                main: "Conectivos e conjunções (discourse markers)",
+                                subs: "Oposição: though, however, although, whereas, but, yet. Adição: moreover, furthermore, besides. Conclusão: therefore, thus, hence. Causa: because, since, as.",
+                                prova: ["Q14 — 'though' = oposição/contraste"],
+                                high: true
+                            },
+                            {
+                                main: "Tempos verbais em contexto",
+                                subs: "Simple Past, Present Perfect, Past Perfect, Future. Voz passiva. Modal verbs (can, could, will, would, may, might).",
+                            },
+                            {
+                                main: "Vocabulário temático — finanças e tecnologia",
+                                subs: "Termos financeiros: currency, bartering, inflation, gold standard, cryptocurrency. Termos de tecnologia: artificial intelligence, digital, evolving.",
+                            },
+                            {
+                                main: "Inferência e interpretação crítica",
+                                subs: "O que o autor implica mas não afirma diretamente. Diferenciar fato de opinião em inglês. Tom do autor (neutral, critical, optimistic).",
+                            },
+                        ]
+                    },
+                ]
+            },
+
+            {
+                id: "ma",
+                title: "Matemática",
+                color: "#fbbf24",
+                weight: "7,5 pts",
+                questoes: "Q16–Q20 · 1,5pt cada",
+                groups: [
+                    {
+                        title: "1. Números e Sistemas",
+                        items: [
+                            {
+                                main: "Números inteiros, racionais e reais",
+                                subs: "Operações, propriedades, valor absoluto, representação na reta real.",
+                            },
+                            {
+                                main: "Problemas de contagem",
+                                subs: "Princípio multiplicativo, fatorial, arranjos, permutações, combinações simples e com repetição.",
+                            },
+                            {
+                                main: "Sistema legal de medidas",
+                                subs: "Conversão entre unidades de comprimento, massa, volume, área, tempo e velocidade.",
+                            },
+                        ]
+                    },
+                    {
+                        title: "2. Razões, Proporções e Porcentagens",
+                        items: [
+                            {
+                                main: "Razões, proporções e divisão proporcional",
+                                subs: "Grandezas direta e inversamente proporcionais. Divisão em partes proporcionais.",
+                            },
+                            {
+                                main: "Regras de três simples e compostas",
+                                subs: "Identificação do tipo de proporcionalidade. Montagem e resolução do sistema.",
+                            },
+                            {
+                                main: "Porcentagens e juros",
+                                subs: "Aumento/desconto percentual. Juros simples e compostos. Capitalização. Taxa nominal e real.",
+                                prova: ["Q20 — problema com proporção e tempo (3/7 do tempo)"],
+                            },
+                        ]
+                    },
+                    {
+                        title: "3. Lógica Proposicional",
+                        items: [
+                            {
+                                main: "Proposições e conectivos lógicos",
+                                subs: "Negação (¬), conjunção (∧), disjunção (∨), condicional (→), bicondicional (↔).",
+                            },
+                            {
+                                main: "Tabela-verdade",
+                                subs: "Construção e análise de proposições compostas. Tautologia, contradição e contingência.",
+                            },
+                            {
+                                main: "Equivalências e contrapositiva",
+                                subs: "Lei de De Morgan. Contrapositiva de uma condicional. Negação de proposições compostas.",
+                                prova: ["Q16 — distribuição de cargos por restrições condicionais (lógica proposicional)"],
+                                high: true
+                            },
+                        ]
+                    },
+                    {
+                        title: "4. Noções de Conjuntos",
+                        items: [
+                            {
+                                main: "Operações com conjuntos",
+                                subs: "União, interseção, diferença, complementar. Diagramas de Venn para 2 e 3 conjuntos.",
+                            },
+                        ]
+                    },
+                    {
+                        title: "5. Relações e Funções",
+                        items: [
+                            {
+                                main: "Funções polinomiais — 1º e 2º grau",
+                                subs: "Domínio, contradomínio, imagem. Raízes. Fórmula de Bhaskara. Vértice da parábola. Máximo/mínimo.",
+                                prova: ["Q17 — modelagem de receita como função quadrática y = ax² + bx + c"],
+                                high: true
+                            },
+                            {
+                                main: "Funções exponenciais e logarítmicas",
+                                subs: "Propriedades de expoentes e logaritmos. Equações exponenciais e logarítmicas. Gráficos.",
+                            },
+                        ]
+                    },
+                    {
+                        title: "6. Álgebra Linear",
+                        items: [
+                            {
+                                main: "Matrizes — operações",
+                                subs: "Adição, subtração, multiplicação de matrizes. Matriz transposta, identidade, nula.",
+                            },
+                            {
+                                main: "Determinantes",
+                                subs: "Regra de Sarrus (3×3). Propriedades. Desenvolvimento por cofatores.",
+                            },
+                            {
+                                main: "Sistemas lineares",
+                                subs: "Método de Cramer, escalonamento, substituição. Sistemas possível determinado/indeterminado e impossível.",
+                                prova: ["Q19 — sistema de 3 equações com cédulas de R$10, R$20, R$50"],
+                                high: true
+                            },
+                        ]
+                    },
+                    {
+                        title: "7. Sequências e Progressões",
+                        items: [
+                            {
+                                main: "Progressão Aritmética (PA)",
+                                subs: "Termo geral: an = a1 + (n−1)r. Soma dos termos: Sn = n(a1+an)/2. Interpolação aritmética.",
+                                prova: ["Q18 — 31 dias com reclamações em PA, cálculo da soma"],
+                                high: true
+                            },
+                            {
+                                main: "Progressão Geométrica (PG)",
+                                subs: "Termo geral: an = a1 · q^(n−1). Soma dos termos (razão ≠ 1). Soma de PG infinita (|q|<1).",
+                            },
+                        ]
+                    },
+                ]
+            },
+
+            {
+                id: "mf",
+                title: "Atualidades do Mercado Financeiro",
+                color: "#c084fc",
+                weight: "5,0 pts",
+                questoes: "Q21–Q25 · 1,0pt cada",
+                groups: [
+                    {
+                        title: "1. Bancos na Era Digital",
+                        items: [
+                            {
+                                main: "Bancos digitais vs tradicionais",
+                                subs: "Modelo 100% digital (sem agências). Conta digital. Custo operacional. Exemplos: Nubank, Inter, C6.",
+                                prova: ["Q21 — principal característica dos bancos exclusivamente digitais"],
+                                high: true
+                            },
+                            {
+                                main: "Internet Banking e Mobile Banking",
+                                subs: "Diferenças, funcionalidades, segurança. Autenticação em dois fatores.",
+                            },
+                            {
+                                main: "Open Banking / Open Finance",
+                                subs: "Compartilhamento de dados entre instituições com consentimento do cliente. Fases de implementação no Brasil.",
+                            },
+                        ]
+                    },
+                    {
+                        title: "2. Novos Modelos de Negócio",
+                        items: [
+                            {
+                                main: "Fintechs, startups e big techs",
+                                subs: "Conceito de fintech. Diferença entre fintech, startup e big tech (Google, Apple, Amazon no setor financeiro).",
+                            },
+                            {
+                                main: "Shadow Banking — Bancos-Sombra",
+                                subs: "Intermediários financeiros fora da regulação bancária tradicional. Exemplos: fundos de hedge, securitizadoras, peer-to-peer lending.",
+                                prova: ["Q22 — shadow banks operam fora da regulação do BCB"],
+                                high: true
+                            },
+                            {
+                                main: "Marketplace financeiro",
+                                subs: "Plataforma digital que reúne múltiplos ofertantes de produtos/serviços financeiros. Shopping virtual de crédito.",
+                                prova: ["Q24 — plataforma digital com múltiplas empresas = marketplace"],
+                                high: true
+                            },
+                            {
+                                main: "Correspondentes bancários",
+                                subs: "Empresas credenciadas para prestar serviços bancários básicos (Lotéricas, Casas Bahia). Regulamentação BCB.",
+                            },
+                        ]
+                    },
+                    {
+                        title: "3. Moeda e Pagamentos",
+                        items: [
+                            {
+                                main: "Funções da moeda",
+                                subs: "Meio de troca (facilita trocas), unidade de conta (padroniza preços), reserva de valor (preserva poder de compra).",
+                                prova: ["Q23 — entesouramento em crises = moeda como reserva de valor"],
+                                high: true
+                            },
+                            {
+                                main: "Sistema de Pagamentos Instantâneos — PIX",
+                                subs: "Funcionamento, chaves PIX, horário disponível 24/7, gratuidade para pessoas físicas. Comparação com TED/DOC.",
+                            },
+                            {
+                                main: "Arranjos de pagamentos",
+                                subs: "Conceito. Participantes: emissor, credenciador, bandeira. Regulação pelo BCB.",
+                            },
+                        ]
+                    },
+                    {
+                        title: "4. Dinheiro na Era Digital",
+                        items: [
+                            {
+                                main: "Blockchain — fundamentos",
+                                subs: "Cadeia de blocos distribuída e imutável. Consenso descentralizado. Criptografia assimétrica (chave pública/privada). Hash.",
+                                prova: ["Q25 — blockchain: armazenamento distribuído, criptografado, sem intermediários"],
+                                high: true
+                            },
+                            {
+                                main: "Bitcoin e criptomoedas",
+                                subs: "Mineração, carteiras digitais, volatilidade. DeFi (finanças descentralizadas). Stablecoins. CBDC (Real Digital).",
+                            },
+                            {
+                                main: "Segmentação e interações digitais",
+                                subs: "Segmentação de clientes por comportamento digital. Onboarding digital. KYC (Know Your Customer) digital.",
+                            },
+                            {
+                                main: "Transformação digital no SFN",
+                                subs: "Open Finance, Pix, sandbox regulatório, agenda BC#, APIs abertas.",
+                            },
+                        ]
+                    },
+                ]
+            },
+
+            {
+                id: "pe",
+                title: "Probabilidade e Estatística",
+                color: "#f87171",
+                weight: "7,5 pts",
+                questoes: "Q26–Q30 · 1,5pt cada",
+                groups: [
+                    {
+                        title: "1. Representação de Dados",
+                        items: [
+                            {
+                                main: "Tabelas e gráficos",
+                                subs: "Tabela de frequência (absoluta, relativa, acumulada). Histograma, polígono de frequência, ogiva, gráfico de barras/setores/linhas.",
+                            },
+                        ]
+                    },
+                    {
+                        title: "2. Medidas de Tendência Central",
+                        items: [
+                            {
+                                main: "Média, mediana e moda",
+                                subs: "Cálculo e interpretação. Média ponderada. Média aritmética vs geométrica vs harmônica. Dados agrupados.",
+                                prova: ["Q29 — média ponderada do tempo de espera em duas semanas"],
+                                high: true
+                            },
+                            {
+                                main: "Quartis, percentis e medidas de posição",
+                                subs: "Q1 (25%), Q2 (50%), Q3 (75%). Boxplot. Identificação de outliers.",
+                            },
+                        ]
+                    },
+                    {
+                        title: "3. Medidas de Dispersão",
+                        items: [
+                            {
+                                main: "Amplitude e amplitude interquartil",
+                                subs: "Amplitude total = max − min. AIQ = Q3 − Q1.",
+                            },
+                            {
+                                main: "Variância e desvio padrão",
+                                subs: "Variância populacional e amostral. DP = raiz da variância. Interpretação da dispersão.",
+                                prova: ["Q26 — distribuição normal: cálculo do desvio padrão com z-scores"],
+                                high: true
+                            },
+                            {
+                                main: "Coeficiente de variação",
+                                subs: "CV = (DP / Média) × 100%. Comparação de dispersão entre grupos com médias diferentes.",
+                            },
+                        ]
+                    },
+                    {
+                        title: "4. Variáveis Aleatórias e Probabilidade",
+                        items: [
+                            {
+                                main: "Probabilidade clássica",
+                                subs: "P(A) = casos favoráveis / casos possíveis. Espaço amostral, eventos, operações com eventos.",
+                            },
+                            {
+                                main: "Probabilidade condicional",
+                                subs: "P(A|B) = P(A∩B) / P(B). Eventos independentes vs dependentes.",
+                            },
+                            {
+                                main: "Teorema de Bayes ⚠️",
+                                subs: "P(A|B) = P(B|A)·P(A) / P(B). Aplicação para revisar probabilidades à luz de novas evidências.",
+                                prova: ["Q30 — dado que cliente usou cheque especial, qual a prob. de ser tipo A? (Bayes)"],
+                                high: true
+                            },
+                            {
+                                main: "Contagem e combinatória em probabilidade",
+                                subs: "Permutações com restrições. Derangements (desarranjos — nenhum no lugar certo).",
+                                prova: ["Q28 — prob. de exatamente 1 celular entregue ao dono (derangement parcial)"],
+                                high: true
+                            },
+                        ]
+                    },
+                    {
+                        title: "5. Distribuições de Probabilidade",
+                        items: [
+                            {
+                                main: "Distribuição binomial",
+                                subs: "P(X=k) = C(n,k) · p^k · (1−p)^(n−k). Média = np. Variância = np(1−p).",
+                            },
+                            {
+                                main: "Distribuição normal",
+                                subs: "Curva de Gauss. Propriedades: simétrica, média=mediana=moda. Regra 68-95-99,7%. Padronização Z = (x−μ)/σ.",
+                                prova: ["Q26 — uso de P(Z>1,64)=5% e P(Z>1,96)=2,5% para achar σ"],
+                                high: true
+                            },
+                        ]
+                    },
+                    {
+                        title: "6. Inferência Estatística e Correlação",
+                        items: [
+                            {
+                                main: "População e amostra",
+                                subs: "Parâmetros (μ, σ²) vs estatísticas (x̄, s²). Tipos de amostragem: aleatória simples, estratificada, sistemática, por conglomerado.",
+                            },
+                            {
+                                main: "Distribuição amostral das médias",
+                                subs: "Teorema Central do Limite. Variância da distribuição amostral = σ²/n.",
+                                prova: ["Q27 — variância amostral com reposição (σ²/n = 24,5/2 = 12,25)"],
+                                high: true
+                            },
+                            {
+                                main: "Correlação linear simples",
+                                subs: "Coeficiente de Pearson (r). Interpretação: r próximo de ±1 = forte, próximo de 0 = fraca. Diagrama de dispersão.",
+                            },
+                            {
+                                main: "Variância e covariância",
+                                subs: "Cov(X,Y) positiva/negativa/zero. Relação com correlação.",
+                            },
+                        ]
+                    },
+                ]
+            },
+
+            {
+                id: "cb",
+                title: "Conhecimentos Bancários",
+                color: "#22d3ee",
+                weight: "7,5 pts",
+                questoes: "Q31–Q35 · 1,5pt cada",
+                groups: [
+                    {
+                        title: "1. Sistema Financeiro Nacional (SFN)",
+                        items: [
+                            {
+                                main: "Estrutura do SFN",
+                                subs: "Órgãos normativos: CMN, CNSP, CNPC. Supervisores: BCB, CVM, SUSEP, PREVIC. Operadores: bancos, corretoras, distribuidoras.",
+                            },
+                        ]
+                    },
+                    {
+                        title: "2. Mercado Financeiro",
+                        items: [
+                            {
+                                main: "Mercado monetário",
+                                subs: "Curto prazo. Instrumentos: CDB, operações compromissadas, CDI, SELIC. Controle de liquidez da economia.",
+                            },
+                            {
+                                main: "Mercado de crédito",
+                                subs: "Concessão de empréstimos e financiamentos. Spread bancário. Crédito direto ao consumidor (CDC). Crédito rural.",
+                            },
+                            {
+                                main: "Mercado de capitais",
+                                subs: "Ações (ordinárias e preferenciais), debêntures, CRI, CRA, FII. Mercado primário e secundário. B3.",
+                            },
+                            {
+                                main: "Mercado cambial",
+                                subs: "Compra e venda de divisas estrangeiras. Taxa de câmbio (PTAX). Mercado spot e a termo.",
+                                prova: ["Q32 — operações diárias de compra/venda de divisas = mercado cambial"],
+                                high: true
+                            },
+                        ]
+                    },
+                    {
+                        title: "3. Moeda e Política Monetária",
+                        items: [
+                            {
+                                main: "Instrumentos de política monetária",
+                                subs: "Compulsório (recolhimento obrigatório), open market (operações com títulos), redesconto (empréstimo de última instância).",
+                            },
+                            {
+                                main: "Taxa SELIC — nominal, real, ex-ante e ex-post",
+                                subs: "SELIC meta (definida pelo COPOM) vs SELIC over. Taxa real = taxa nominal descontada inflação esperada (ex-ante) ou realizada (ex-post).",
+                                prova: ["Q31 — taxa real ex-ante = SELIC nominal esperada − inflação esperada 12m"],
+                                high: true
+                            },
+                            {
+                                main: "Quantitative Easing (QE)",
+                                subs: "Política monetária não convencional. Compra de ativos pelo BC para injetar liquidez.",
+                            },
+                        ]
+                    },
+                    {
+                        title: "4. Câmbio e Fluxo de Capitais",
+                        items: [
+                            {
+                                main: "Regimes cambiais: fixo, flutuante, intermediários",
+                                subs: "Câmbio fixo: BC intervém sempre. Flutuante (free float): mercado determina. Flutuação suja: BC intervém ocasionalmente.",
+                            },
+                            {
+                                main: "Taxas de câmbio nominais e reais",
+                                subs: "Taxa nominal = preço da moeda estrangeira em moeda nacional. Taxa real = ajustada pelos preços relativos.",
+                            },
+                            {
+                                main: "Impactos das taxas de câmbio",
+                                subs: "Desvalorização do real: exportações ficam mais competitivas, importações encarecem, inflação sobe.",
+                            },
+                            {
+                                main: "Equação de paridade dos juros — UIP",
+                                subs: "i_dom − i_ext = expectativa de depreciação + risco-país. Para atrair capital estrangeiro: aumentar juro interno ou reduzir risco-país.",
+                                prova: ["Q33 — deterioração fiscal → aumento risco-país → precisa aumentar juro interno"],
+                                high: true
+                            },
+                        ]
+                    },
+                    {
+                        title: "5. Orçamento Público e Dívida",
+                        items: [
+                            {
+                                main: "Déficit e superávit fiscal — primário e nominal",
+                                subs: "Resultado primário = receitas − despesas sem juros. Resultado nominal = primário − juros sobre dívida.",
+                                prova: ["Q34 — despesas primárias > receitas de impostos = déficit fiscal primário"],
+                                high: true
+                            },
+                            {
+                                main: "Títulos do Tesouro Nacional",
+                                subs: "LFT (SELIC), LTN (prefixada), NTN-B (IPCA+), NTN-F (prefixada com juros semestrais). Tesouro Direto.",
+                            },
+                        ]
+                    },
+                    {
+                        title: "6. Legislação Bancária",
+                        items: [
+                            {
+                                main: "Sigilo Bancário — LC 105/2001",
+                                subs: "Instituições obrigadas ao sigilo (bancos, administradoras de cartão, administradoras de mercado de balcão). Quebra de sigilo: autorização judicial ou CPI.",
+                                prova: ["Q35 — administradoras de mercado de balcão organizado sujeitas ao sigilo"],
+                                high: true
+                            },
+                            {
+                                main: "LGPD — Lei 13.709/2018",
+                                subs: "Bases legais para tratamento de dados. ANPD. Direitos do titular. DPO. Sanções.",
+                            },
+                            {
+                                main: "Lei Anticorrupção — Lei 12.846/2013",
+                                subs: "Responsabilidade objetiva de pessoas jurídicas. Acordo de leniência. Decreto 11.129/2022.",
+                            },
+                            {
+                                main: "Lavagem de dinheiro — Lei 9.613/98",
+                                subs: "3 etapas: colocação, ocultação (layering), integração. Política de PLD/CFT. Comunicação ao COAF.",
+                            },
+                            {
+                                main: "Segurança cibernética — Resolução CMN 4.893/2021",
+                                subs: "Política de segurança cibernética obrigatória para instituições financeiras. Requisitos mínimos.",
+                            },
+                            {
+                                main: "Autorregulação bancária — SARB",
+                                subs: "Normativos da FEBRABAN. Código de conduta. Proteção ao consumidor bancário.",
+                            },
+                        ]
+                    },
+                    {
+                        title: "7. Produtos e Garantias",
+                        items: [
+                            {
+                                main: "Produtos bancários",
+                                subs: "Cartões de crédito/débito. Poupança. Consórcio. Previdência (PGBL/VGBL). Capitalização. Seguros. Fundos de investimento.",
+                            },
+                            {
+                                main: "Garantias do SFN",
+                                subs: "Aval (garantia pessoal em títulos de crédito), fiança (contrato), penhor mercantil, alienação fiduciária (bem como garantia), hipoteca (imóvel).",
+                            },
+                            {
+                                main: "Ética, ASG e Responsabilidade Socioambiental",
+                                subs: "Código de Ética BB. Política socioambiental BB. ASG (Ambiental, Social, Governança) = ESG. Finanças sustentáveis.",
+                            },
+                        ]
+                    },
+                ]
+            },
+
+            {
+                id: "ti",
+                title: "Tecnologia da Informação",
+                color: "#fb923c",
+                weight: "52,5 pts ⭐",
+                questoes: "Q36–Q70 · 1,5pt cada — MAIOR PESO",
+                groups: [
+                    {
+                        title: "🐍 Python — NumPy, Pandas, Scikit-learn (4 questões / 6 pts)",
+                        items: [
+                            {
+                                main: "NumPy — fundamentos",
+                                subs: "np.array(), reshape((-1,1)), transpose(), dot product, operações vetorizadas, broadcasting.",
+                                prova: ["Q51 — b.dot(c), sum(b), sum(c) com array 2D transposto"],
+                                high: true
+                            },
+                            {
+                                main: "NumPy — np.where()",
+                                subs: "np.where(condição, valor_se_verdadeiro, valor_se_falso). Criação de campos derivados em datasets.",
+                                prova: ["Q61 — np.where(stars >= 4, 'bom', 'ruim')"],
+                                high: true
+                            },
+                            {
+                                main: "Pandas — DataFrame e seleção de dados",
+                                subs: "pd.DataFrame(), seleção de colunas: df[['col1','col2']], máscaras booleanas: df[mask], filtros com condições.",
+                                prova: ["Q45 — máscara df['z']==False + seleção de colunas ef[['x','y']]"],
+                                high: true
+                            },
+                            {
+                                main: "Scikit-learn — regressão linear",
+                                subs: "from sklearn.linear_model import LinearRegression. modelo = LinearRegression().fit(X, y). Atributos: coef_[0] (inclinação), intercept_ (intercepto).",
+                                prova: ["Q36 — LinearRegression().fit(x, y) para obter a e b de y=ax+b"],
+                                high: true
+                            },
+                            {
+                                main: "Python — bibliotecas complementares",
+                                subs: "SciPy (estatística avançada), Matplotlib (visualização: plt.plot, plt.hist, plt.scatter). Instalação e importação.",
+                            },
+                        ]
+                    },
+                    {
+                        title: "☕ Java SE 11 (6 questões / 9 pts)",
+                        items: [
+                            {
+                                main: "Orientação a objetos — herança e polimorfismo",
+                                subs: "extends, super(). Sobrescrita (@Override). Polimorfismo de subtipo. Regra: método chamado depende do objeto real (não da referência).",
+                                prova: ["Q64 — CAx o = new CBy(): polimorfismo + static não é polimórfico + bloco inicializador"],
+                                high: true
+                            },
+                            {
+                                main: "Interfaces — implements",
+                                subs: "interface vs abstract class. Implementação com implements. Múltiplas interfaces. default methods (Java 8+).",
+                                prova: ["Q38 — class X implements Interface (não extends)"],
+                                high: true
+                            },
+                            {
+                                main: "Blocos inicializadores e ordem de execução",
+                                subs: "Bloco estático (static {}): executado 1x ao carregar a classe. Bloco de instância ({}): executado antes do construtor. Ordem: static → instância → construtor.",
+                                prova: ["Q64 — bloco {} executa antes do construtor em CAx"],
+                                high: true
+                            },
+                            {
+                                main: "Tratamento de exceções — try/catch/finally",
+                                subs: "finally SEMPRE executa (exceto System.exit()). Re-throw com throw e. Exceções checked vs unchecked. NullPointerException.",
+                                prova: ["Q65 — fluxo com super(), try/catch/finally em herança"],
+                                high: true
+                            },
+                            {
+                                main: "Manipulação de String em Java",
+                                subs: "charAt(i), length(), substring(), concat(), toUpperCase(), toLowerCase(). Character.isLowerCase(), Character.isUpperCase(). String é imutável.",
+                                prova: ["Q70 — converter minúsculas em maiúsculas iterando com charAt()"],
+                                high: true
+                            },
+                            {
+                                main: "Android com Java — componentes",
+                                subs: "Activity (tela autônoma), Intent (comunicação entre Activities), Service, BroadcastReceiver, ContentProvider. TextView.setText().",
+                                prova: ["Q46 — Activity = módulo único e autônomo", "Q48 — resultado.setText('Sucesso!')"],
+                            },
+                        ]
+                    },
+                    {
+                        title: "🗄️ SQL e Banco de Dados Relacional (9 questões / 13,5 pts) ⭐",
+                        items: [
+                            {
+                                main: "SELECT — filtros e projeção",
+                                subs: "SELECT col1, col2 FROM tabela WHERE condição. Operadores: =, <>, >, <, BETWEEN, IN, LIKE. NULL e IS NULL.",
+                                prova: ["Q58 — SELECT CNPJ, razaoSocial FROM Empresa WHERE atividade = '4120-4/00'"],
+                                high: true
+                            },
+                            {
+                                main: "JOIN — tipos e funcionamento",
+                                subs: "INNER JOIN (intersecção). LEFT/RIGHT OUTER JOIN. Produto cartesiano (sem WHERE de junção = CROSS JOIN).",
+                                prova: ["Q56 — produto cartesiano sem JOIN retorna todos os pares possíveis"],
+                                high: true
+                            },
+                            {
+                                main: "Subqueries — NOT IN / NOT EXISTS",
+                                subs: "Subquery correlacionada vs não correlacionada. NOT IN para excluir registros que aparecem em outra tabela.",
+                                prova: ["Q53 — WHERE CNPJ NOT IN (SELECT CNPJ FROM Tem JOIN ... WHERE sigla='ESG')"],
+                                high: true
+                            },
+                            {
+                                main: "Funções de agregação",
+                                subs: "COUNT(*), SUM(), AVG(), MIN(), MAX(). GROUP BY e HAVING. Diferença WHERE (linhas) vs HAVING (grupos).",
+                                prova: ["Q55 — SELECT COUNT(*) com JOIN e filtro F.maiorIdade <= 19"],
+                                high: true
+                            },
+                            {
+                                main: "DDL — CREATE TABLE, constraints",
+                                subs: "PRIMARY KEY, FOREIGN KEY REFERENCES, NOT NULL, UNIQUE, DEFAULT, CHECK. ALTER TABLE, DROP TABLE.",
+                                prova: ["Q69 — CREATE TABLE REL com FK para TX e EY, escolha da chave primária"],
+                                high: true
+                            },
+                            {
+                                main: "Modelagem E-R — entidades e relacionamentos",
+                                subs: "Entidade, atributo (simples, composto, multivalorado), relacionamento. Notação de cardinalidade (1:1, 1:N, N:M). Entidade fraca.",
+                                prova: ["Q68 — diagrama E-R com cardinalidades (0,1) e (1,n) → regras de integridade"],
+                                high: true
+                            },
+                            {
+                                main: "Mapeamento E-R → tabelas relacionais",
+                                subs: "Entidade → tabela, PK. Relação 1:N → FK no lado N. Relação N:M → tabela associativa com PK composta.",
+                                prova: ["Q69 — relação Rel com atributos próprios r1, r2 → PK composta (X1,Y1)"],
+                                high: true
+                            },
+                            {
+                                main: "Normalização — 1FN, 2FN, 3FN",
+                                subs: "1FN: sem grupos repetidos, atributos atômicos. 2FN: sem dependência parcial da PK. 3FN: sem dependência transitiva.",
+                            },
+                            {
+                                main: "Índices, visões e SGBD",
+                                subs: "Índice: estrutura para acelerar consultas (B-tree, hash). Visão materializada vs não materializada. Funções do SGBD: ACID, controle de acesso, recuperação.",
+                                prova: ["Q54 — índices para melhorar desempenho de consultas", "Q57 — SGBD controla quem acessa que dados"],
+                                high: true
+                            },
+                            {
+                                main: "PostgreSQL — especificidades",
+                                subs: "Tipos de dados: TEXT, INTEGER, BOOLEAN, TIMESTAMP. Sequências (SERIAL). EXPLAIN ANALYZE. Compatibilidade SQL2008.",
+                            },
+                        ]
+                    },
+                    {
+                        title: "📦 NoSQL (2 questões / 3 pts)",
+                        items: [
+                            {
+                                main: "Tipos de bancos NoSQL",
+                                subs: "Chave/valor (Redis): simples, alta velocidade. Colunar (Cassandra): análise de grandes volumes. Documentos (MongoDB): JSON flexível. Grafos (Neo4j): relacionamentos complexos.",
+                                prova: ["Q59 — rede de relacionamentos entre pessoas → banco orientado a grafos"],
+                                high: true
+                            },
+                            {
+                                main: "MongoDB — conceitos básicos",
+                                subs: "Documento (BSON/JSON), coleção, banco. Sem schema fixo. Consultas: find(), insertOne(), updateOne(). ObjectId.",
+                                prova: ["Q52 — dados não estruturados → NoSQL para modelagem sem schema rígido"],
+                            },
+                            {
+                                main: "Data Warehouse — conceitos",
+                                subs: "Modelagem dimensional: fatos e dimensões. Esquema estrela e floco de neve. OLAP vs OLTP. ETL (Extract, Transform, Load).",
+                            },
+                        ]
+                    },
+                    {
+                        title: "🤖 Machine Learning e PLN (3 questões / 4,5 pts)",
+                        items: [
+                            {
+                                main: "Hierarquia: Dado → Informação → Conhecimento",
+                                subs: "Dado: item bruto captado. Informação: dado processado com contexto. Conhecimento: padrões e relações extraídas da informação.",
+                                prova: ["Q39 — 3 níveis da hierarquia do conhecimento em ML"],
+                                high: true
+                            },
+                            {
+                                main: "Aprendizado supervisionado",
+                                subs: "Treinamento com dados rotulados. Algoritmos: regressão linear, regressão logística, árvore de decisão, SVM, k-NN, Random Forest.",
+                            },
+                            {
+                                main: "Aprendizado não supervisionado",
+                                subs: "Sem rótulos. Algoritmos: K-Means (clustering), DBSCAN, PCA (redução de dimensionalidade), regras de associação.",
+                                prova: ["Q42 — agrupar clientes sem rótulo = aprendizado não supervisionado"],
+                                high: true
+                            },
+                            {
+                                main: "PLN — Processamento de Linguagem Natural",
+                                subs: "Pipeline: coleta → tokenização → remoção de stopwords → stemming/lemmatização → vetorização (TF-IDF, Word2Vec) → modelo.",
+                                prova: ["Q41 — tokenização = dividir texto em palavras/tokens individuais"],
+                                high: true
+                            },
+                            {
+                                main: "Análise de sentimentos",
+                                subs: "Classificação de texto em positivo/negativo/neutro. Abordagem por léxico (dicionários de sentimento) e por ML supervisionado.",
+                            },
+                        ]
+                    },
+                    {
+                        title: "📊 Big Data (3 questões / 4,5 pts)",
+                        items: [
+                            {
+                                main: "Os 3 V's (definição original) + V's adicionais",
+                                subs: "Volume (quantidade), Variedade (tipos: estruturado/semiestruturado/não estruturado), Velocidade (stream vs batch). Outros: Veracidade, Valor.",
+                                prova: ["Q43 — Big Data original: Volume + Variedade + Velocidade"],
+                                high: true
+                            },
+                            {
+                                main: "PCA — Análise de Componentes Principais",
+                                subs: "Redução de dimensionalidade supervisionada. Transforma p variáveis correlacionadas em k componentes não correlacionados (k < p). Preserva variância.",
+                                prova: ["Q44 — número de atributos/colunas excessivo → PCA para reduzir dimensionalidade"],
+                                high: true
+                            },
+                            {
+                                main: "Detecção de outliers e qualidade de dados",
+                                subs: "Outlier: ponto anômalo distante da distribuição. Métodos: boxplot (IQR), z-score, DBSCAN, Isolation Forest. Tratamento: remoção, imputação, manutenção.",
+                                prova: ["Q62 — identificar anomalias/resultados raros = detecção de outliers"],
+                                high: true
+                            },
+                            {
+                                main: "Técnicas de preparação de dados",
+                                subs: "Limpeza: missing values, duplicatas, inconsistências. Transformação: normalização, padronização. Feature engineering. Deduplicação. Imputação.",
+                            },
+                        ]
+                    },
+                    {
+                        title: "🌲 Estruturas de Dados e Algoritmos (3 questões / 4,5 pts)",
+                        items: [
+                            {
+                                main: "Busca sequencial e busca binária",
+                                subs: "Sequencial: O(n), não exige ordenação. Binária: O(log n), exige array ordenado. A cada passo: mid = (low+high)/2; comparar com alvo.",
+                                prova: ["Q63 — busca binária em array de 14 elementos buscando 78: visita 67, 86, 72, 79"],
+                                high: true
+                            },
+                            {
+                                main: "Pilha (Stack) — LIFO",
+                                subs: "push (empilhar) e pop (desempilhar). Topo = último elemento inserido. Aplicações: recursão, undo, expressões.",
+                                prova: ["Q66 — manipulação de P1, P2, P3 em A1 e A2 com operações de pilha"],
+                                high: true
+                            },
+                            {
+                                main: "Fila (Queue) — FIFO",
+                                subs: "enqueue (inserir no fim) e dequeue (remover do início). Aplicações: escalonamento, BFS, impressão.",
+                            },
+                            {
+                                main: "Lista encadeada",
+                                subs: "Nó com dado e ponteiro para próximo. Simples, dupla, circular. Inserção O(1) no início, busca O(n).",
+                            },
+                            {
+                                main: "Árvore binária — percursos",
+                                subs: "Pré-ordem: raiz → esquerda → direita. In-ordem: esq → raiz → dir. Pós-ordem: esq → dir → raiz. BST: in-ordem = sequência ordenada.",
+                                prova: ["Q67 — percurso pré-ordem resulta em 80 84 55 76 72"],
+                                high: true
+                            },
+                            {
+                                main: "Algoritmos de ordenação",
+                                subs: "Bubble Sort: troca adjacentes, O(n²). Selection Sort: seleciona mínimo, O(n²). Insertion Sort: insere na posição, O(n²) pior / O(n) melhor.",
+                            },
+                        ]
+                    },
+                    {
+                        title: "📱 Mobile: Android e iOS (3 questões / 4,5 pts)",
+                        items: [
+                            {
+                                main: "Android API 30 — componentes principais",
+                                subs: "Activity (tela autônoma com ciclo de vida), Fragment (módulo reutilizável), Intent (comunicação), Service, BroadcastReceiver, ContentProvider. AndroidManifest.xml.",
+                                prova: ["Q46 — Activity = módulo único e autônomo no Android 11 (API 30)"],
+                                high: true
+                            },
+                            {
+                                main: "Android com Java — widgets e UI",
+                                subs: "TextView, EditText, Button, RecyclerView. Métodos: setText(), getText(), setOnClickListener(). LayoutInflater. findViewById().",
+                                prova: ["Q48 — resultado.setText('Sucesso!') para alterar texto do TextView"],
+                                high: true
+                            },
+                            {
+                                main: "Kotlin — interoperabilidade com Java",
+                                subs: "Código Kotlin pode chamar Java e vice-versa na mesma aplicação. Anotações @JvmStatic, @JvmField. Null safety em Kotlin.",
+                                prova: ["Q50 — Kotlin: construir apps com código Java e Kotlin misturado sem restrições"],
+                                high: true
+                            },
+                            {
+                                main: "Swift — string interpolation e sintaxe",
+                                subs: "let (constante) vs var (variável). String interpolation: \\(expressão). Tipos: Int, Double, String, Bool. Opcionais: var x: String?.",
+                                prova: ["Q37 — let saida = 'valor total = \\(quantidade*valor)'"],
+                                high: true
+                            },
+                        ]
+                    },
+                    {
+                        title: "⚛️ React Native 0.59 e TypeScript 4.0 (2 questões / 3 pts)",
+                        items: [
+                            {
+                                main: "React Native — Hooks",
+                                subs: "useState: estado local em componente funcional. useEffect: efeitos colaterais (chamadas API, subscriptions). Regras dos hooks: apenas no top-level, apenas em funções React.",
+                                prova: ["Q47 — useState = manter estado local em componente funcional"],
+                                high: true
+                            },
+                            {
+                                main: "TypeScript — tipagem estática e inferência",
+                                subs: "Tipagem estática: tipos verificados em tempo de compilação. Inferência: TypeScript deduz o tipo pela atribuição inicial. Erro ao atribuir tipo incompatível.",
+                                prova: ["Q60 — let fraseLegal = 'texto' infere string; fraseLegal = 9.5 gera erro de compilação"],
+                                high: true
+                            },
+                            {
+                                main: "TypeScript — tipos e funções",
+                                subs: "Tipos primitivos: string, number, boolean, any, void. Arrays: number[]. Arrow functions. map(), filter(), reduce(). Interfaces e tipos customizados.",
+                                prova: ["Q40 — function segredo(a: number[]) com map(x=>x*2) retorna [2,4,6]"],
+                            },
+                        ]
+                    },
+                    {
+                        title: "🔧 Ansible e Ferramentas (1 questão / 1,5 pts)",
+                        items: [
+                            {
+                                main: "Ansible — arquitetura e playbooks",
+                                subs: "Playbook (arquivo YAML) → plays (conjunto de tasks em hosts) → tasks (ações) → modules (unidades de trabalho: apt, copy, template, service).",
+                                prova: ["Q49 — playbook → plays → tasks → modules"],
+                                high: true
+                            },
+                            {
+                                main: "YAML — sintaxe básica",
+                                subs: "Indentação com espaços. Listas com -. Dicionários com chave: valor. Strings multiline. Booleanos: true/false.",
+                            },
+                        ]
+                    },
+                ]
+            },
+        ];
+
+        // ── STATE ──────────────────────────────────────────────────────────────
+        const state = {};
+        let totalItems = 0;
+
+        function getAllItems() {
+            const items = [];
+            DATA.forEach(s => s.groups.forEach(g => g.items.forEach(it => {
+                const id = s.id + '_' + g.title.slice(0, 10).replace(/\W/g, '') + '_' + it.main.slice(0, 10).replace(/\W/g, '');
+                items.push({ id, subjectId: s.id });
+                state[id] = false;
+            })));
+            return items;
+        }
+
+        function buildId(sId, gTitle, main) {
+            return sId + '_' + gTitle.slice(0, 10).replace(/\W/g, '') + '_' + main.slice(0, 10).replace(/\W/g, '');
+        }
+
+        // ── RENDER ─────────────────────────────────────────────────────────────
+        function render() {
+            totalItems = 0;
+            const container = document.getElementById('subjectsContainer');
+            container.innerHTML = '';
+
+            DATA.forEach(subject => {
+                // Count items for this subject
+                let subTotal = 0, subDone = 0;
+                subject.groups.forEach(g => g.items.forEach(it => {
+                    const id = buildId(subject.id, g.title, it.main);
+                    subTotal++;
+                    totalItems++;
+                    if (state[id]) subDone++;
+                }));
+
+                const pct = subTotal ? Math.round(subDone / subTotal * 100) : 0;
+                const isOpen = subject.id === 'ti'; // TI open by default
+
+                const card = document.createElement('div');
+                card.className = 'subject-card';
+                card.id = 'card_' + subject.id;
+
+                card.innerHTML = `
+      <button class="subject-header" onclick="toggleSubject('${subject.id}')">
+        <div class="subject-accent-bar" style="background:${subject.color}"></div>
+        <div class="subject-info">
+          <div class="subject-title-row">
+            <span class="subject-title">${subject.title}</span>
+            <span class="weight-badge" style="background:${subject.color}22;color:${subject.color};border:1px solid ${subject.color}44">${subject.weight}</span>
+          </div>
+          <div class="subject-meta">${subject.questoes} · ${subDone}/${subTotal} tópicos</div>
+        </div>
+        <div class="subject-progress-col">
+          <div>
+            <div class="subject-track"><div class="subject-fill" id="fill_${subject.id}" style="width:${pct}%;background:${subject.color}"></div></div>
+            <div class="subject-pct" id="pct_${subject.id}" style="color:${subject.color}">${pct}%</div>
+          </div>
+          <span class="chevron ${isOpen ? 'open' : ''}" id="chev_${subject.id}">▼</span>
+        </div>
+      </button>
+      <div class="subject-body ${isOpen ? 'open' : ''}" id="body_${subject.id}">
+        ${subject.groups.map(g => renderGroup(subject, g)).join('')}
+      </div>
+    `;
+                container.appendChild(card);
+            });
+
+            updateGlobalProgress();
+        }
+
+        function renderGroup(subject, g) {
+            return `
+    <div class="subtopic-group">
+      <div class="subtopic-title" style="color:${subject.color}">
+        ${g.title}
+      </div>
+      ${g.items.map(it => renderItem(subject, g, it)).join('')}
+    </div>
+  `;
+        }
+
+        function renderItem(subject, g, it) {
+            const id = buildId(subject.id, g.title, it.main);
+            const isChecked = state[id] || false;
+            const badges = [];
+            if (it.prova) it.prova.forEach(p => badges.push(`<span class="badge-prova">⭐ ${p}</span>`));
+            if (it.high && !it.prova) badges.push(`<span class="badge-high">↑ Alta recorrência</span>`);
+
+            return `
+    <button class="topic-item ${isChecked ? 'checked' : ''}" id="item_${id}" onclick="toggleItem('${id}', '${subject.id}', '${subject.color.replace('#', '')}')">
+      <div class="checkbox" style="${isChecked ? `background:${subject.color}` : ''}">
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+          <path d="M1.5 5l2.5 2.5 4.5-4.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="topic-text-wrap">
+        <div class="topic-main">${it.main}</div>
+        ${it.subs ? `<div class="topic-subs">${it.subs}</div>` : ''}
+        ${badges.length ? `<div class="topic-badges">${badges.join('')}</div>` : ''}
+      </div>
+    </button>
+  `;
+        }
+
+        // ── INTERACTIONS ───────────────────────────────────────────────────────
+        function toggleItem(id, subjectId, colorHex) {
+            state[id] = !state[id];
+            const color = '#' + colorHex;
+            const btn = document.getElementById('item_' + id);
+            const cb = btn.querySelector('.checkbox');
+
+            if (state[id]) {
+                btn.classList.add('checked');
+                cb.style.background = color;
+                cb.style.borderColor = 'transparent';
+            } else {
+                btn.classList.remove('checked');
+                cb.style.background = '';
+                cb.style.borderColor = '';
+            }
+
+            updateSubjectProgress(subjectId, color);
+            updateGlobalProgress();
+        }
+
+        function updateSubjectProgress(subjectId, color) {
+            const subject = DATA.find(s => s.id === subjectId);
+            if (!subject) return;
+            let total = 0, done = 0;
+            subject.groups.forEach(g => g.items.forEach(it => {
+                const id = buildId(subject.id, g.title, it.main);
+                total++;
+                if (state[id]) done++;
+            }));
+            const pct = total ? Math.round(done / total * 100) : 0;
+            const fillEl = document.getElementById('fill_' + subjectId);
+            const pctEl = document.getElementById('pct_' + subjectId);
+            const metaEl = document.querySelector(`#card_${subjectId} .subject-meta`);
+
+            if (fillEl) fillEl.style.width = pct + '%';
+            if (pctEl) pctEl.textContent = pct + '%';
+            if (metaEl) {
+                const parts = metaEl.textContent.split('·');
+                metaEl.textContent = `${parts[0].trim()} · ${done}/${total} tópicos`;
+            }
+        }
+
+        function updateGlobalProgress() {
+            let done = 0;
+            Object.values(state).forEach(v => { if (v) done++; });
+            const pct = totalItems ? Math.round(done / totalItems * 100) : 0;
+            document.getElementById('gpFill').style.width = pct + '%';
+            document.getElementById('gpPct').textContent = pct + '%';
+            document.getElementById('gpDone').textContent = done + ' concluídos';
+            document.getElementById('gpTotal').textContent = totalItems + ' tópicos';
+        }
+
+        function toggleSubject(id) {
+            const body = document.getElementById('body_' + id);
+            const chev = document.getElementById('chev_' + id);
+            body.classList.toggle('open');
+            chev.classList.toggle('open');
+        }
+
+        function togglePython() {
+            const body = document.getElementById('pyBody');
+            const chev = document.getElementById('pyChevron');
+            body.classList.toggle('open');
+            const isOpen = body.classList.contains('open');
+            chev.textContent = isOpen ? '▲' : '▼';
+        }
+
+        // ── INIT ───────────────────────────────────────────────────────────────
+        render();
+    </script>
+</body>
+
+</html>
