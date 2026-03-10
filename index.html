@@ -622,6 +622,112 @@
             }
         }
 
+        /* ── DEADLINE WIDGET ── */
+        .deadline-widget {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 20px 28px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .deadline-widget::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--ti), var(--bb-yellow));
+        }
+
+        .deadline-icon {
+            font-size: 26px;
+            flex-shrink: 0;
+        }
+
+        .deadline-body {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .deadline-label {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 4px;
+        }
+
+        .deadline-date {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--bb-yellow);
+            line-height: 1.1;
+        }
+
+        .deadline-sub {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            color: var(--muted);
+            margin-top: 4px;
+            letter-spacing: 0.04em;
+        }
+
+        .deadline-days {
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        .deadline-days-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--ti);
+            line-height: 1;
+        }
+
+        .deadline-days-label {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .deadline-rhythm {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            color: var(--muted);
+            margin-top: 6px;
+            letter-spacing: 0.04em;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .deadline-rhythm-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--ti);
+            flex-shrink: 0;
+        }
+
+        @media(max-width:640px) {
+            .deadline-widget {
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+        }
+
         /* ── SECTION LABEL ── */
         .section-label {
             font-family: 'DM Mono', monospace;
@@ -676,6 +782,21 @@
             <div class="gp-pct" id="gpPct">0%</div>
         </div>
 
+
+        <!-- DEADLINE WIDGET -->
+        <div class="deadline-widget">
+            <div class="deadline-icon">📅</div>
+            <div class="deadline-body">
+                <div class="deadline-label">Previsão de conclusão</div>
+                <div class="deadline-date" id="dlDate">Calculando…</div>
+                <div class="deadline-sub" id="dlSub">—</div>
+                <div class="deadline-rhythm" id="dlRhythm"><span class="deadline-rhythm-dot"></span><span id="dlRhythmText">—</span></div>
+            </div>
+            <div class="deadline-days">
+                <div class="deadline-days-num" id="dlDays">—</div>
+                <div class="deadline-days-label">dias restantes</div>
+            </div>
+        </div>
 
         <!-- SUBJECTS CONTAINER -->
         <div id="subjectsContainer"></div>
@@ -1705,22 +1826,119 @@
             },
         ];
 
+        // ── PERSISTENCE ────────────────────────────────────────────────────────
+        const LS_CHECKS = 'bbStudy_checks_v1';
+        const LS_EXPAND = 'bbStudy_expanded_v1';
+        const LS_START = 'bbStudy_startDate_v1';
+
+        function saveChecks() {
+            try { localStorage.setItem(LS_CHECKS, JSON.stringify(state)); } catch (e) { }
+        }
+        function loadChecks() {
+            try {
+                const raw = localStorage.getItem(LS_CHECKS);
+                if (raw) {
+                    const saved = JSON.parse(raw);
+                    Object.assign(state, saved);
+                }
+            } catch (e) { }
+        }
+        function saveExpanded() {
+            try {
+                const expanded = {};
+                DATA.forEach(s => {
+                    const body = document.getElementById('body_' + s.id);
+                    if (body) expanded[s.id] = body.classList.contains('open');
+                });
+                localStorage.setItem(LS_EXPAND, JSON.stringify(expanded));
+            } catch (e) { }
+        }
+        function loadExpanded() {
+            try {
+                const raw = localStorage.getItem(LS_EXPAND);
+                return raw ? JSON.parse(raw) : null;
+            } catch (e) { return null; }
+        }
+        function getStartDate() {
+            try {
+                let d = localStorage.getItem(LS_START);
+                if (!d) {
+                    d = new Date().toISOString().slice(0, 10);
+                    localStorage.setItem(LS_START, d);
+                }
+                return d;
+            } catch (e) {
+                return new Date().toISOString().slice(0, 10);
+            }
+        }
+
         // ── STATE ──────────────────────────────────────────────────────────────
         const state = {};
         let totalItems = 0;
 
-        function getAllItems() {
-            const items = [];
-            DATA.forEach(s => s.groups.forEach(g => g.items.forEach(it => {
-                const id = s.id + '_' + g.title.slice(0, 10).replace(/\W/g, '') + '_' + it.main.slice(0, 10).replace(/\W/g, '');
-                items.push({ id, subjectId: s.id });
-                state[id] = false;
-            })));
-            return items;
-        }
-
         function buildId(sId, gTitle, main) {
             return sId + '_' + gTitle.slice(0, 10).replace(/\W/g, '') + '_' + main.slice(0, 10).replace(/\W/g, '');
+        }
+
+        // ── DEADLINE CALCULATOR ────────────────────────────────────────────────
+        // Assumptions (ADS graduate, preparing for a specific exam):
+        //   • Total topics: ~N
+        //   • Base pace: 3 topics/day (ADS = solid background, especially TI)
+        //   • Study days: 6 days/week (1 day rest)
+        //   • Remaining = total - done
+        //   • If done > 0, boost pace slightly (momentum factor)
+        const BASE_TOPICS_PER_DAY = 3;
+        const STUDY_DAYS_PER_WEEK = 6;
+
+        function updateDeadline() {
+            let done = 0, total = 0;
+            Object.values(state).forEach(v => { total++; if (v) done++; });
+            const remaining = total - done;
+
+            const startDateStr = getStartDate();
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            // Effective pace: small boost per 10% progress (familiarity effect)
+            const pct = total ? done / total : 0;
+            const pace = BASE_TOPICS_PER_DAY * (1 + pct * 0.4); // up to 40% faster at 100%
+
+            // Days needed = remaining / (pace * studyDaysFraction)
+            const studyFraction = STUDY_DAYS_PER_WEEK / 7;
+            const calendarDaysNeeded = remaining > 0 ? Math.ceil(remaining / (pace * studyFraction)) : 0;
+
+            const finishDate = new Date(today);
+            finishDate.setDate(finishDate.getDate() + calendarDaysNeeded);
+
+            const daysFromNow = calendarDaysNeeded;
+
+            // Format finish date in Portuguese
+            const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+            const weekdays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+            const dateStr = remaining === 0
+                ? '🎉 Tudo concluído!'
+                : `${weekdays[finishDate.getDay()]}, ${finishDate.getDate()} ${months[finishDate.getMonth()]} ${finishDate.getFullYear()}`;
+
+            const subStr = remaining === 0
+                ? 'Você completou todos os tópicos'
+                : `${remaining} tópico${remaining !== 1 ? 's' : ''} restante${remaining !== 1 ? 's' : ''}`;
+
+            const topicsPerDay = Math.round(pace * 10) / 10;
+            const rhythmStr = remaining === 0
+                ? 'Revisão livre 🚀'
+                : `Ritmo estimado: ~${topicsPerDay} tópicos/dia · ${STUDY_DAYS_PER_WEEK}×/semana`;
+
+            document.getElementById('dlDate').textContent = dateStr;
+            document.getElementById('dlSub').textContent = subStr;
+            document.getElementById('dlRhythmText').textContent = rhythmStr;
+            document.getElementById('dlDays').textContent = remaining === 0 ? '✓' : daysFromNow;
+
+            // Color the days counter by urgency
+            const dlDaysEl = document.getElementById('dlDays');
+            if (remaining === 0) dlDaysEl.style.color = '#34d399';
+            else if (daysFromNow <= 14) dlDaysEl.style.color = '#f87171';
+            else if (daysFromNow <= 30) dlDaysEl.style.color = '#fbbf24';
+            else dlDaysEl.style.color = 'var(--ti)';
         }
 
         // ── RENDER ─────────────────────────────────────────────────────────────
@@ -1728,9 +1946,9 @@
             totalItems = 0;
             const container = document.getElementById('subjectsContainer');
             container.innerHTML = '';
+            const savedExpanded = loadExpanded();
 
             DATA.forEach(subject => {
-                // Count items for this subject
                 let subTotal = 0, subDone = 0;
                 subject.groups.forEach(g => g.items.forEach(it => {
                     const id = buildId(subject.id, g.title, it.main);
@@ -1740,7 +1958,13 @@
                 }));
 
                 const pct = subTotal ? Math.round(subDone / subTotal * 100) : 0;
-                const isOpen = subject.id === 'ti'; // TI open by default
+
+                // Determine open state: use saved preference, else default all closed
+                let isOpen = false;
+                if (savedExpanded !== null) {
+                    isOpen = !!savedExpanded[subject.id];
+                }
+                // If no saved state at all, start everything collapsed (user's request)
 
                 const card = document.createElement('div');
                 card.className = 'subject-card';
@@ -1772,6 +1996,7 @@
             });
 
             updateGlobalProgress();
+            updateDeadline();
         }
 
         function renderGroup(subject, g) {
@@ -1825,8 +2050,10 @@
                 cb.style.borderColor = '';
             }
 
+            saveChecks();
             updateSubjectProgress(subjectId, color);
             updateGlobalProgress();
+            updateDeadline();
         }
 
         function updateSubjectProgress(subjectId, color) {
@@ -1866,6 +2093,7 @@
             const chev = document.getElementById('chev_' + id);
             body.classList.toggle('open');
             chev.classList.toggle('open');
+            saveExpanded();
         }
 
         function togglePython() {
@@ -1877,6 +2105,12 @@
         }
 
         // ── INIT ───────────────────────────────────────────────────────────────
+        // Populate all IDs as false first, then overlay saved checks
+        DATA.forEach(s => s.groups.forEach(g => g.items.forEach(it => {
+            state[buildId(s.id, g.title, it.main)] = false;
+        })));
+        loadChecks();
+        getStartDate();
         render();
     </script>
 </body>
